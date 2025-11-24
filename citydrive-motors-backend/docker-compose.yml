@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: citydrive-postgres
+    environment:
+      POSTGRES_USER: citydrive
+      POSTGRES_PASSWORD: citydrive123
+      POSTGRES_DB: citydrive_db
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
