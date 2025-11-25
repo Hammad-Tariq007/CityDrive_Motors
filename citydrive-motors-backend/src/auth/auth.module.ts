@@ -4,12 +4,11 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtStrategy } from './jwt.strategy'; // ← ADD THIS
-import { User } from '../database/entities/user.entity'; // ← important import
-
+import { JwtStrategy } from './jwt.strategy';
+import { User } from '../database/entities/user.entity';
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]), // ← THIS LINE ADDS THE REPOSITORY
+    TypeOrmModule.forFeature([User]),
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,

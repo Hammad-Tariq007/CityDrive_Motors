@@ -16,7 +16,6 @@ export class CarsService {
     private carsRepository: Repository<Car>,
   ) {}
 
-  // CREATE - set owner via relation
   async create(dto: CreateCarDto, userId: string): Promise<Car> {
     const car = this.carsRepository.create({
       ...dto,
@@ -25,12 +24,10 @@ export class CarsService {
     return this.carsRepository.save(car);
   }
 
-  // Public list
   async findAll(): Promise<Car[]> {
     return this.carsRepository.find({ relations: ['owner'] });
   }
 
-  // My cars only
   async findMyCars(userId: string): Promise<Car[]> {
     return this.carsRepository.find({
       where: { owner: { id: userId } },
@@ -38,7 +35,6 @@ export class CarsService {
     });
   }
 
-  // Find one
   async findOne(id: string): Promise<Car> {
     const car = await this.carsRepository.findOne({
       where: { id },
@@ -48,12 +44,10 @@ export class CarsService {
     return car;
   }
 
-  // Helper for OwnerGuard
   async getCarOrFail(id: string): Promise<Car> {
     return this.findOne(id);
   }
 
-  // UPDATE
   async update(id: string, dto: UpdateCarDto, userId: string): Promise<Car> {
     const car = await this.findOne(id);
     if (car.owner?.id !== userId) {
@@ -63,7 +57,6 @@ export class CarsService {
     return this.carsRepository.save(car);
   }
 
-  // DELETE
   async remove(id: string, userId: string): Promise<void> {
     const car = await this.findOne(id);
     if (car.owner?.id !== userId) {

@@ -1,4 +1,3 @@
-// src/cars/cars.controller.ts
 import {
   Controller,
   Get,
@@ -17,36 +16,51 @@ import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { OwnerGuard } from '../common/guards/owner.guard';
-
-// MULTER + EXPRESS IMPORTS
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { File as MulterFile } from 'multer';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiConsumes,
+  ApiBody,
+} from '@nestjs/swagger';
 
+@ApiTags('Cars')
 @Controller('cars')
 export class CarsController {
   constructor(private readonly carsService: CarsService) {}
 
   @Get()
+  @ApiOperation({ summary: 'Get all cars (public)' })
+  @ApiResponse({ status: 200, description: 'List of cars' })
   findAll() {
     return this.carsService.findAll();
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @Get('my-cars')
+  @ApiOperation({ summary: 'Get cars owned by the logged-in user' })
+  @ApiResponse({ status: 200, description: "List of user's cars" })
   findMyCars(@Request() req: any) {
     return this.carsService.findMyCars(req.user.sub);
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get details of a car by ID' })
+  @ApiResponse({ status: 200, description: 'Car details' })
+  @ApiResponse({ status: 404, description: 'Car not found' })
   findOne(@Param('id') id: string) {
     return this.carsService.findOne(id);
   }
 
-  // CREATE CAR WITH IMAGES — 100% WORKING
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @Post()
   @UseInterceptors(
     FilesInterceptor('images', 10, {
@@ -66,13 +80,16 @@ export class CarsController {
       limits: { fileSize: 5 * 1024 * 1024 },
     }),
   )
+  @ApiOperation({ summary: 'Create a new car' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: CreateCarDto })
+  @ApiResponse({ status: 201, description: 'Car created successfully' })
   async create(
     @Body() dto: CreateCarDto,
     @Request() req: any,
     @UploadedFiles() files: MulterFile[],
   ) {
     const imageUrls = files?.map((file) => `/uploads/${file.filename}`) || [];
-
     const fullDto = {
       ...dto,
       price: Number(dto.price),
@@ -80,12 +97,16 @@ export class CarsController {
       year: Number(dto.year),
       images: imageUrls,
     };
-
     return this.carsService.create(fullDto, req.user.sub);
   }
 
   @UseGuards(AuthGuard('jwt'), OwnerGuard)
+  @ApiBearerAuth()
   @Patch(':id')
+  @ApiOperation({ summary: 'Update a car (owner only)' })
+  @ApiResponse({ status: 200, description: 'Car updated successfully' })
+  @ApiResponse({ status: 403, description: 'Forbidden (not owner)' })
+  @ApiResponse({ status: 404, description: 'Car not found' })
   async update(
     @Param('id') id: string,
     @Body() dto: UpdateCarDto,
@@ -97,7 +118,12 @@ export class CarsController {
   }
 
   @UseGuards(AuthGuard('jwt'), OwnerGuard)
+  @ApiBearerAuth()
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a car (owner only)' })
+  @ApiResponse({ status: 200, description: 'Car deleted successfully' })
+  @ApiResponse({ status: 403, description: 'Forbidden (not owner)' })
+  @ApiResponse({ status: 404, description: 'Car not found' })
   async remove(@Param('id') id: string, @Request() req: any) {
     const car = await this.carsService.getCarOrFail(id);
     req.car = car;

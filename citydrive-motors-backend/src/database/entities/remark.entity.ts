@@ -4,7 +4,7 @@ import {
   Column,
   ManyToOne,
   CreateDateColumn,
-  JoinColumn, // ← YE IMPORT THA MISSING!
+  JoinColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 import { Car } from './car.entity';
@@ -23,7 +23,6 @@ export class Remark {
   @CreateDateColumn()
   createdAt: Date;
 
-  // FIXED: author → user + JoinColumn
   @ManyToOne(() => User, (user) => user.remarks, {
     onDelete: 'SET NULL',
     nullable: true,

@@ -4,21 +4,28 @@ import {
   Injectable,
   ForbiddenException,
 } from '@nestjs/common';
+import { CarsService } from '../../cars/cars.service';
 
 @Injectable()
 export class OwnerGuard implements CanActivate {
-  canActivate(context: ExecutionContext): boolean {
+  constructor(private carsService: CarsService) {}
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const userId = request.user?.sub;
-    const car = request.car; // we will set this in the service
+    const carId = request.params.id;
 
-    if (!userId || !car) {
+    if (!userId || !carId) {
       throw new ForbiddenException('Invalid request');
     }
 
-    if (car.ownerId !== userId) {
+    const car = await this.carsService.findOne(carId);
+
+    if (car.owner?.id !== userId) {
       throw new ForbiddenException('You can only modify your own cars');
     }
+
+    request.car = car;
 
     return true;
   }

@@ -49,16 +49,13 @@ export class Car {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  // Relation: Many cars belong to one user
   @ManyToOne(() => User, (user) => user.cars, {
     onDelete: 'SET NULL',
     nullable: true,
   })
-  @JoinColumn({ name: 'ownerId' }) // ← This forces the column name exactly as "ownerId"
+  @JoinColumn({ name: 'ownerId' })
   owner?: User;
 
   @OneToMany(() => Remark, (remark) => remark.car)
   remarks?: Remark[];
-  // We no longer need @RelationId — TypeORM automatically exposes ownerId from the relation
-  // You can still use car.ownerId in code — it works perfectly!
 }

@@ -20,17 +20,16 @@ export class RemarksService {
 
     const remark = this.remarksRepository.create({
       ...dto,
-      car, // ← car relation
-      user: { id: userId }, // ← user relation (not author)
+      car,
+      user: { id: userId },
     });
-
     return this.remarksRepository.save(remark);
   }
 
   async findByCar(carId: string) {
     return this.remarksRepository.find({
       where: { car: { id: carId } },
-      relations: ['user'], // ← load user
+      relations: ['user'],
       order: { createdAt: 'DESC' },
     });
   }

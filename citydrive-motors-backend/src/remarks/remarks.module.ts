@@ -3,12 +3,10 @@ import { RemarksService } from './remarks.service';
 import { RemarksController } from './remarks.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Remark } from '../database/entities/remark.entity';
-import { Car } from '../database/entities/car.entity'; // ← ADD THIS
+import { Car } from '../database/entities/car.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Remark, Car]), // ← ADD Car here!
-  ],
+  imports: [TypeOrmModule.forFeature([Remark, Car])],
   controllers: [RemarksController],
   providers: [RemarksService],
 })

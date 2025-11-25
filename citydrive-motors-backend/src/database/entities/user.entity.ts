@@ -4,9 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany, // ← ADD THIS IMPORT
+  OneToMany,
 } from 'typeorm';
-import { Car } from './car.entity'; // ← ADD THIS IMPORT
+import { Car } from './car.entity';
 import { Remark } from './remark.entity';
 
 @Entity('users')
@@ -32,7 +32,6 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  // ← THIS IS THE MISSING REVERSE RELATION
   @OneToMany(() => Car, (car) => car.owner)
   cars?: Car[];
 
