@@ -1,22 +1,20 @@
-// src/pages/MyListings.tsx
 import { Link } from "react-router-dom";
 import { useMyCars } from "../hooks/useCars";
-import { useAuth } from "../context/AuthContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../api/axios";
 import toast from "react-hot-toast";
+import Navbar from "../components/Navbar";
+
 
 export default function MyListings() {
-  const { user, logout } = useAuth();
   const { data: cars, isLoading } = useMyCars();
   const queryClient = useQueryClient();
 
-  // DELETE MUTATION — ONLY OWNER CAN DELETE (backend protected)
   const deleteMutation = useMutation({
     mutationFn: (carId: string) => api.delete(`/cars/${carId}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-cars"] });
-      queryClient.invalidateQueries({ queryKey: ["cars"] }); // also update home page
+      queryClient.invalidateQueries({ queryKey: ["cars"] });
       toast.success("Car deleted successfully");
     },
     onError: (err: any) => {
@@ -36,52 +34,8 @@ export default function MyListings() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* NAVBAR */}
-      <nav className="bg-white shadow-lg sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link to="/" className="text-3xl font-bold text-blue-600">
-              CityDrive Motors
-            </Link>
+      <Navbar/>
 
-            <div className="flex items-center gap-6">
-              {user ? (
-                <>
-                  <span className="text-gray-700 font-medium">
-                    Hi, {user.email.split("@")[0]}!
-                  </span>
-                  <Link
-                    to="/add-car"
-                    className="bg-green-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-green-700 transition"
-                  >
-                    + Sell Car
-                  </Link>
-                  <button
-                    onClick={logout}
-                    className="text-red-600 font-semibold hover:underline"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link to="/login" className="text-blue-600 font-semibold">
-                    Login
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold"
-                  >
-                    Register
-                  </Link>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {/* MAIN CONTENT */}
       <div className="max-w-7xl mx-auto p-8">
         <h1 className="text-4xl font-bold text-gray-800 mb-10">My Listings</h1>
 
@@ -96,7 +50,6 @@ export default function MyListings() {
                 key={car.id}
                 className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col h-full"
               >
-                {/* REAL IMAGE — SAME AS HOME PAGE */}
                 {car.images && car.images.length > 0 ? (
                   <img
                     src={`http://localhost:3000${car.images[0]}`}
@@ -133,7 +86,6 @@ export default function MyListings() {
                     </p>
                   )}
 
-                  {/* BUTTONS */}
                   <div className="mt-6 pt-4 border-t border-gray-200 space-y-3">
                     <Link
                       to={`/car/${car.id}`}
@@ -177,7 +129,7 @@ export default function MyListings() {
               to="/add-car"
               className="inline-block bg-green-600 text-white px-10 py-5 rounded-xl text-xl font-bold hover:bg-green-700 transition shadow-lg"
             >
-              + Sell Your First Car
+              Sell Your First Car
             </Link>
           </div>
         )}

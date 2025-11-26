@@ -1,4 +1,3 @@
-// src/pages/CarDetails.tsx
 import { useParams, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../api/axios";
@@ -34,7 +33,10 @@ export default function CarDetails() {
       toast.success("Remark posted successfully!");
     },
     onError: (error: any) => {
-      const msg = error.response?.data?.message || error.message || "Failed to post remark";
+      const msg =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to post remark";
       toast.error(msg);
     },
   });
@@ -54,7 +56,6 @@ export default function CarDetails() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar */}
       <nav className="bg-white shadow-lg sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-8 py-5 flex justify-between items-center">
           <Link to="/" className="text-3xl font-bold text-blue-600">
@@ -65,7 +66,10 @@ export default function CarDetails() {
               ← All Cars
             </Link>
             {user && (
-              <Link to="/my-cars" className="text-blue-600 font-bold hover:underline">
+              <Link
+                to="/my-cars"
+                className="text-blue-600 font-bold hover:underline"
+              >
                 My Listings
               </Link>
             )}
@@ -74,9 +78,7 @@ export default function CarDetails() {
       </nav>
 
       <div className="max-w-6xl mx-auto p-8">
-        {/* Car Info */}
         <div className="grid md:grid-cols-2 gap-12 mb-16">
-          {/* REAL CAR IMAGE — SAME AS HOME PAGE */}
           <div className="relative">
             {car.images && car.images.length > 0 ? (
               <img
@@ -95,7 +97,6 @@ export default function CarDetails() {
             )}
           </div>
 
-          {/* Car Details */}
           <div>
             <h1 className="text-5xl font-bold text-gray-800">
               {car.year} {car.brand} {car.model}
@@ -127,20 +128,21 @@ export default function CarDetails() {
           </div>
         </div>
 
-        {/* Remarks Section */}
         <div className="bg-white rounded-3xl shadow-2xl p-10">
           <h2 className="text-4xl font-bold mb-10">
             Remarks ({remarks.length})
           </h2>
 
-          {/* Add Remark */}
           {user ? (
             <div className="flex gap-4 mb-12">
               <input
                 value={remark}
                 onChange={(e) => setRemark(e.target.value)}
                 onKeyDown={(e) =>
-                  e.key === "Enter" && !addRemark.isPending && remark.trim() && handlePost()
+                  e.key === "Enter" &&
+                  !addRemark.isPending &&
+                  remark.trim() &&
+                  handlePost()
                 }
                 placeholder="Write your remark here..."
                 className="flex-1 px-6 py-5 border-2 border-gray-300 rounded-xl text-lg focus:border-blue-500 outline-none transition"
@@ -162,7 +164,6 @@ export default function CarDetails() {
             </p>
           )}
 
-          {/* Remarks List */}
           {remarksLoading ? (
             <p className="text-center text-gray-500 py-8">Loading remarks...</p>
           ) : remarks.length === 0 ? (
@@ -182,7 +183,9 @@ export default function CarDetails() {
                   <p className="text-sm text-gray-500 mt-3">
                     —{" "}
                     <span className="font-medium text-gray-700">
-                      {r.user?.name || r.user?.email?.split("@")[0] || "Anonymous"}
+                      {r.user?.name ||
+                        r.user?.email?.split("@")[0] ||
+                        "Anonymous"}
                     </span>{" "}
                     • {format(new Date(r.createdAt), "dd MMM yyyy - HH:mm")}
                   </p>

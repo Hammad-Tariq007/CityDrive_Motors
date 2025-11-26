@@ -1,26 +1,37 @@
-import { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const { login, isLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = (location.state as any)?.from || "/";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate('/');
-    } catch (err) {
-      // toast error already shown in AuthContext
-    }
+
+      navigate(from, { replace: true });
+    } catch (err) {}
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center px-4">
+      <div className="max-w-md w-full mx-auto mb-8">
+        <Link
+          to="/"
+          className="text-blue-600 font-semibold hover:underline flex items-center gap-2 text-lg"
+        >
+          ← Back to Home
+        </Link>
+      </div>
+
+      <div className="max-w-md w-full mx-auto bg-white rounded-lg shadow-lg p-8">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900">CityDrive</h1>
           <p className="text-gray-600 mt-2">Welcome back! Please login</p>
@@ -28,7 +39,9 @@ export default function Login() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
             <input
               type="email"
               value={email}
@@ -40,7 +53,9 @@ export default function Login() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Password</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
             <input
               type="password"
               value={password}
@@ -56,13 +71,16 @@ export default function Login() {
             disabled={isLoading}
             className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 transition"
           >
-            {isLoading ? 'Logging in...' : 'Login'}
+            {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
 
         <p className="text-center mt-6 text-gray-600">
-          Don't have an account?{' '}
-          <Link to="/register" className="text-blue-600 font-semibold hover:underline">
+          Don't have an account?{" "}
+          <Link
+            to="/register"
+            className="text-blue-600 font-semibold hover:underline"
+          >
             Register here
           </Link>
         </p>

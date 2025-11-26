@@ -1,4 +1,3 @@
-// src/pages/AddCar.tsx
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -56,7 +55,6 @@ export default function AddCar() {
 
     setLoading(true);
 
-    // === STRONG CLIENT-SIDE VALIDATION & CONVERSION ===
     const year = parseInt(formData.year, 10);
     const price = parseFloat(formData.price);
     const mileage = parseInt(formData.mileage, 10);
@@ -209,7 +207,6 @@ export default function AddCar() {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
 
-            {/* IMAGE UPLOAD */}
             <div>
               <label className="block text-lg font-medium mb-3">
                 Upload Images (up to 10)
