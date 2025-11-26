@@ -11,8 +11,8 @@ export default function Footer() {
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2 text-gray-400">
               <li><a href="/" className="hover:text-white">Home</a></li>
-              <li><a href="/my-cars" className="hover:text-white">My Listings</a></li>
-              <li><a href="/add-car" className="hover:text-white">Sell Car</a></li>
+              <li><a href="/login" className="hover:text-white">Login</a></li>
+              <li><a href="/register" className="hover:text-white">Register</a></li>
             </ul>
           </div>
           <div>

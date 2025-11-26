@@ -36,7 +36,7 @@ export default function Hero() {
             Find Your <span className="text-blue-400">Dream Car</span>
           </h1>
           <p className="text-2xl md:text-3xl mb-10 text-gray-200">
-            Thousands of verified used cars from trusted sellers across Pakistan
+            Thousands of verified new and used cars from trusted sellers across Pakistan
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6">

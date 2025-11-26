@@ -34,7 +34,7 @@ export default function Register() {
               onChange={(e) => setName(e.target.value)}
               required
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              placeholder="John Doe"
+              placeholder="Hammad Bin Tariq"
             />
           </div>
 
@@ -46,7 +46,7 @@ export default function Register() {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              placeholder="john@example.com"
+              placeholder="hammad@example.com"
             />
           </div>
 
