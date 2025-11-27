@@ -4,14 +4,14 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 export const typeormConfig: TypeOrmModuleOptions = {
   type: 'postgres',
-  url: process.env.DATABASE_URL || undefined,
-  host: process.env.DATABASE_URL ? undefined : 'localhost',
-  port: process.env.DATABASE_URL ? undefined : 5432,
-  username: process.env.DATABASE_URL ? undefined : 'citydrive',
-  password: process.env.DATABASE_URL ? undefined : 'citydrive123',
-  database: process.env.DATABASE_URL ? undefined : 'citydrive_db',
+  url: process.env.DATABASE_URL,
+
   entities: [__dirname + '/../database/entities/*.entity{.ts,.js}'],
+
+  // DO NOT use synchronize in production
   synchronize: !isProduction,
   logging: !isProduction,
+
   ssl: isProduction ? { rejectUnauthorized: false } : false,
+  extra: isProduction ? { ssl: { rejectUnauthorized: false } } : {},
 };
