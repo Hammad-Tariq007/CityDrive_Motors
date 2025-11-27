@@ -6,6 +6,11 @@ import { CarsModule } from './cars/cars.module';
 import { RemarksModule } from './remarks/remarks.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(typeormConfig), AuthModule, CarsModule, RemarksModule],
+  imports: [
+    TypeOrmModule.forRoot(typeormConfig),
+    AuthModule,
+    CarsModule,
+    RemarksModule,
+  ],
 })
 export class AppModule {}

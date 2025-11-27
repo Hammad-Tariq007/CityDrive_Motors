@@ -1,14 +1,12 @@
-// src/hooks/useCars.ts
-import { useQuery } from '@tanstack/react-query';
-import api from '../api/axios';
-import type { Car } from '../types/car';
+import { useQuery } from "@tanstack/react-query";
+import api from "../api/axios";
+import type { Car } from "../types/car";
 
-// Public cars (Home page)
 export const useCars = () => {
   return useQuery<Car[]>({
-    queryKey: ['cars'],
+    queryKey: ["cars"],
     queryFn: async () => {
-      const { data } = await api.get('/cars');
+      const { data } = await api.get("/cars");
       return data;
     },
     staleTime: 0,
@@ -18,12 +16,11 @@ export const useCars = () => {
   });
 };
 
-// Your cars (My Listings page)
 export const useMyCars = () => {
   return useQuery<Car[]>({
-    queryKey: ['my-cars'],
+    queryKey: ["my-cars"],
     queryFn: async () => {
-      const { data } = await api.get('/cars/my-cars');  // Correct URL
+      const { data } = await api.get("/cars/my-cars");
       return data;
     },
     staleTime: 0,
