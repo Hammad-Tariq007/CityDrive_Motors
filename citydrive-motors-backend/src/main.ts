@@ -8,10 +8,6 @@ import * as express from 'express';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-await app.get(DataSource).initialize()
-  .then(() => console.log('✅ Database connected successfully'))
-  .catch(err => console.error('❌ Database connection failed:', err));
-
 app.enableCors({
   origin: function (origin, callback) {
     const allowedOrigins = [
