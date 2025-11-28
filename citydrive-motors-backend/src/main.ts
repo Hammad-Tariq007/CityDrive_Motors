@@ -9,12 +9,20 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
 app.enableCors({
-  origin: [
-    'http://localhost:5173',
-    'https://city-drive-motors.vercel.app',
-  ],
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'https://city-drive-motors.vercel.app'
+    ];
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 });
+
 
   app.useGlobalPipes(
     new ValidationPipe({
