@@ -9,12 +9,12 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: [
-      'http://localhost:5173', // local dev
-      'https://city-drive-motors.vercel.app', // production frontend (Railway)
-    ],
-    credentials: true,
-  });
+  origin: [
+    'http://localhost:5173', // local dev
+    'https://city-drive-motors.vercel.app', // production frontend
+  ],
+  credentials: true,
+});
 
   app.useGlobalPipes(
     new ValidationPipe({
