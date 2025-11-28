@@ -11,7 +11,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:5173', // local dev
-      process.env.FRONTEND_URL, // production frontend (Railway)
+      'https://city-drive-motors.vercel.app', // production frontend (Railway)
     ],
     credentials: true,
   });
