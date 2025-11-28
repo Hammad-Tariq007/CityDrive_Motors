@@ -8,10 +8,10 @@ import * as express from 'express';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors({
+app.enableCors({
   origin: [
     'http://localhost:5173', // local dev
-    'https://city-drive-motors.vercel.app', // production frontend
+    process.env.FRONTEND_URL, // production frontend from Railway env
   ],
   credentials: true,
 });
