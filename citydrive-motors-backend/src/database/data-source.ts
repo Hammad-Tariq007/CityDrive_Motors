@@ -1,4 +1,3 @@
-// src/database/data-source.ts
 import { DataSource } from 'typeorm';
 import { User } from './entities/user.entity';
 import { Car } from './entities/car.entity';

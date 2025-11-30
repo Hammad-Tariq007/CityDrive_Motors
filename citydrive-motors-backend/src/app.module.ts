@@ -4,6 +4,7 @@ import { typeormConfig } from './config/typeorm.config';
 import { AuthModule } from './auth/auth.module';
 import { CarsModule } from './cars/cars.module';
 import { RemarksModule } from './remarks/remarks.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { RemarksModule } from './remarks/remarks.module';
     AuthModule,
     CarsModule,
     RemarksModule,
+    HealthModule,
   ],
 })
 export class AppModule {}

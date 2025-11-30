@@ -1,13 +1,36 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
 import * as path from 'path';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger:
+      process.env.NODE_ENV === 'production'
+        ? ['error', 'warn', 'log']
+        : ['error', 'warn', 'log', 'debug', 'verbose'],
+  });
+
+  const logger = new Logger('Bootstrap');
+
+  // CORS – allow Vercel domain + localhost during dev
+  const allowedOrigins = [
+    'http://localhost:5173',
+    'https://city-drive-motors.vercel.app/',
+  ];
+
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: (origin, callback) => {
+      if (
+        !origin ||
+        allowedOrigins.some((o) => origin.includes(o.split('://')[1]))
+      ) {
+        callback(null, true);
+      } else {
+        callback(null, true); // Remove this line later when you want strict CORS
+      }
+    },
     credentials: true,
   });
 
@@ -16,25 +39,41 @@ async function bootstrap() {
       transform: true,
       whitelist: true,
       forbidNonWhitelisted: true,
+      // Hide detailed errors in production
+      disableErrorMessages: process.env.NODE_ENV === 'production',
     }),
   );
 
+  // Serve uploaded files
   app.use(
     '/uploads',
     require('express').static(path.join(__dirname, '..', 'uploads')),
   );
 
+  // Health check endpoint (Railway & monitoring tools love this)
+  app.getHttpAdapter().get('/health', (req, res) => {
+    res.status(200).json({
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+    });
+  });
+
+  // Swagger
   const config = new DocumentBuilder()
     .setTitle('CityDrive Motors API')
-    .setDescription('API documentation for CityDrive Motors')
+    .setDescription('API documentation')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
-
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
 
-  await app.listen(3000);
-}
+  const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+  await app.listen(port);
 
+  logger.log(`Application running on port ${port}`);
+  logger.log(`Health check: ${await app.getUrl()}/health`);
+  logger.log(`Swagger docs: ${await app.getUrl()}/api-docs`);
+}
 bootstrap();

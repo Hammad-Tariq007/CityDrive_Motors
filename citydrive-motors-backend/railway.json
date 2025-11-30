@@ -1,0 +1,11 @@
+{
+  "build": {
+    "builder": "paketo",
+    "buildCommand": "npm run build"
+  },
+  "start": "node dist/main",
+  "env": {
+    "NODE_ENV": "production",
+    "PORT": "3000"
+  }
+}
