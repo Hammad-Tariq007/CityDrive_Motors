@@ -1,9 +1,9 @@
 {
   "build": {
     "builder": "paketo",
-    "buildCommand": "npm run build"
+    "buildCommand": "npm install && npm run build"
   },
-  "start": "node dist/main",
+  "start": "npm run start:migrate",
   "env": {
     "NODE_ENV": "production",
     "PORT": "3000"
