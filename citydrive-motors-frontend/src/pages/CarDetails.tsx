@@ -78,25 +78,31 @@ export default function CarDetails() {
       </nav>
 
       <div className="max-w-6xl mx-auto p-8">
-        <div className="grid md:grid-cols-2 gap-12 mb-16">
-          <div className="relative">
-            {car.images && car.images.length > 0 ? (
-              <img
-                src={`http://localhost:3000${car.images[0]}`}
-                alt={`${car.year} ${car.brand} ${car.model}`}
-                className="w-full h-96 object-cover rounded-2xl shadow-2xl"
-                loading="lazy"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = "/placeholder-car.jpg";
-                }}
-              />
-            ) : (
-              <div className="bg-gray-200 border-2 border-dashed rounded-2xl w-full h-96 flex items-center justify-center text-3xl text-gray-500">
-                No Image
-              </div>
-            )}
-          </div>
+        {/* IMAGE GALLERY — ALL CLOUDINARY IMAGES */}
+        <div className="grid md:grid-cols-2 gap-8 mb-16">
+          {car.images && car.images.length > 0 ? (
+            <div className="grid grid-cols-2 gap-4">
+              {car.images.map((url: string, index: number) => (
+                <img
+                  key={index}
+                  src={url}
+                  alt={`Car image ${index + 1}`}
+                  className="w-full h-64 object-cover rounded-2xl shadow-xl hover:shadow-2xl transition-shadow cursor-pointer"
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.src =
+                      "https://via.placeholder.com/800x600/1a1a1a/ffffff?text=Image+Not+Found";
+                  }}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="bg-gray-200 border-2 border-dashed rounded-2xl w-full h-96 flex items-center justify-center text-3xl text-gray-500">
+              No Images Available
+            </div>
+          )}
 
+          {/* CAR DETAILS */}
           <div>
             <h1 className="text-5xl font-bold text-gray-800">
               {car.year} {car.brand} {car.model}
@@ -128,6 +134,7 @@ export default function CarDetails() {
           </div>
         </div>
 
+        {/* REMARKS SECTION */}
         <div className="bg-white rounded-3xl shadow-2xl p-10">
           <h2 className="text-4xl font-bold mb-10">
             Remarks ({remarks.length})

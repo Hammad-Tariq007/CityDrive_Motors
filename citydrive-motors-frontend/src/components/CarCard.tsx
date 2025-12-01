@@ -8,12 +8,17 @@ interface CarCardProps {
 export default function CarCard({ car }: CarCardProps) {
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col h-full">
+      {/* MAIN IMAGE — NOW USES CLOUDINARY URL DIRECTLY */}
       {car.images && car.images.length > 0 ? (
         <img
-          src={`http://localhost:3000${car.images[0]}`}
+          src={car.images[0]}
           alt={`${car.brand} ${car.model}`}
           className="w-full h-48 object-cover"
           loading="lazy"
+          onError={(e) => {
+            e.currentTarget.src =
+              "https://via.placeholder.com/600x400/1e293b/ffffff?text=No+Image";
+          }}
         />
       ) : (
         <div className="bg-gray-200 border-2 border-dashed w-full h-48 flex items-center justify-center text-gray-500">
