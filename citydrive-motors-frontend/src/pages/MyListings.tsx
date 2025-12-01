@@ -5,7 +5,6 @@ import api from "../api/axios";
 import toast from "react-hot-toast";
 import Navbar from "../components/Navbar";
 
-
 export default function MyListings() {
   const { data: cars, isLoading } = useMyCars();
   const queryClient = useQueryClient();
@@ -34,7 +33,7 @@ export default function MyListings() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar/>
+      <Navbar />
 
       <div className="max-w-7xl mx-auto p-8">
         <h1 className="text-4xl font-bold text-gray-800 mb-10">My Listings</h1>
@@ -50,15 +49,16 @@ export default function MyListings() {
                 key={car.id}
                 className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col h-full"
               >
+                {/* FIXED: NOW USES CLOUDINARY URL DIRECTLY */}
                 {car.images && car.images.length > 0 ? (
                   <img
-                    src={`http://localhost:3000${car.images[0]}`}
+                    src={car.images[0]}
                     alt={`${car.brand} ${car.model}`}
                     className="w-full h-48 object-cover"
                     loading="lazy"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src =
-                        "/placeholder-car.jpg";
+                      e.currentTarget.src =
+                        "https://via.placeholder.com/600x400/1e293b/ffffff?text=No+Image";
                     }}
                   />
                 ) : (
