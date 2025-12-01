@@ -14,7 +14,7 @@ export const AppDataSource = new DataSource({
   entities: [User, Car, Remark],
   migrations: ['dist/migrations/*.js'],
   synchronize: false,
-  logging: true,
+  logging: false,
 });
 
 module.exports = AppDataSource;
