@@ -33,11 +33,11 @@ export default function CarDetails() {
       toast.success("Remark posted successfully!");
     },
     onError: (error: any) => {
-      const msg =
+      toast.error(
         error.response?.data?.message ||
-        error.message ||
-        "Failed to post remark";
-      toast.error(msg);
+          error.message ||
+          "Failed to post remark"
+      );
     },
   });
 
@@ -77,60 +77,62 @@ export default function CarDetails() {
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto p-8">
-        {/* IMAGE GALLERY — ALL CLOUDINARY IMAGES */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
-          {car.images && car.images.length > 0 ? (
-            <div className="grid grid-cols-2 gap-4">
-              {car.images.map((url: string, index: number) => (
+      <div className="max-w-7xl mx-auto p-8">
+        {/* HERO SECTION — IMAGE + DETAILS SIDE BY SIDE */}
+        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden mb-16">
+          <div className="grid md:grid-cols-2 gap-0">
+            {/* IMAGE — FULL HEIGHT, ROUNDED CORNERS */}
+            <div className="relative bg-gray-900">
+              {car.images && car.images.length > 0 ? (
                 <img
-                  key={index}
-                  src={url}
-                  alt={`Car image ${index + 1}`}
-                  className="w-full h-64 object-cover rounded-2xl shadow-xl hover:shadow-2xl transition-shadow cursor-pointer"
-                  loading="lazy"
+                  src={car.images[0]}
+                  alt={`${car.year} ${car.brand} ${car.model}`}
+                  className="w-full h-full min-h-96 object-cover"
                   onError={(e) => {
                     e.currentTarget.src =
-                      "https://via.placeholder.com/800x600/1a1a1a/ffffff?text=Image+Not+Found";
+                      "https://via.placeholder.com/1200x800/1a1a1a/ffffff?text=No+Image";
                   }}
                 />
-              ))}
-            </div>
-          ) : (
-            <div className="bg-gray-200 border-2 border-dashed rounded-2xl w-full h-96 flex items-center justify-center text-3xl text-gray-500">
-              No Images Available
-            </div>
-          )}
-
-          {/* CAR DETAILS */}
-          <div>
-            <h1 className="text-5xl font-bold text-gray-800">
-              {car.year} {car.brand} {car.model}
-            </h1>
-            <p className="text-6xl font-bold text-green-600 mt-6">
-              PKR {(car.price / 100).toLocaleString()}
-            </p>
-            <div className="mt-8 space-y-4 text-xl">
-              <p>
-                <strong>Mileage:</strong> {car.mileage.toLocaleString()} km
-              </p>
-              <p>
-                <strong>Listed by:</strong> {car.owner?.email || "Unknown"}
-              </p>
-              <p>
-                <strong>Date:</strong>{" "}
-                {format(new Date(car.createdAt), "dd MMM yyyy")}
-              </p>
+              ) : (
+                <div className="w-full h-full min-h-96 bg-gray-200 border-2 border-dashed flex items-center justify-center text-4xl text-gray-500">
+                  No Image
+                </div>
+              )}
             </div>
 
-            {car.description && (
-              <div className="mt-10 bg-gray-100 p-8 rounded-2xl">
-                <h3 className="text-2xl font-bold mb-4">Description</h3>
-                <p className="text-lg leading-relaxed text-gray-700">
-                  {car.description}
+            {/* DETAILS */}
+            <div className="p-12 flex flex-col justify-center">
+              <h1 className="text-5xl font-bold text-gray-800">
+                {car.year} {car.brand} {car.model}
+              </h1>
+              <p className="text-6xl font-bold text-green-600 mt-6">
+                PKR {(car.price / 100).toLocaleString()}
+              </p>
+
+              <div className="mt-10 space-y-6 text-xl">
+                <p>
+                  <strong>Mileage:</strong> {car.mileage.toLocaleString()} km
+                </p>
+                <p>
+                  <strong>Listed by:</strong> {car.owner?.email || "Unknown"}
+                </p>
+                <p>
+                  <strong>Date:</strong>{" "}
+                  {format(new Date(car.createdAt), "dd MMM yyyy")}
                 </p>
               </div>
-            )}
+
+              {car.description && (
+                <div className="mt-12 bg-gray-100 p-8 rounded-2xl">
+                  <h3 className="text-2xl font-bold mb-4 text-gray-800">
+                    Description
+                  </h3>
+                  <p className="text-lg leading-relaxed text-gray-700">
+                    {car.description}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -157,7 +159,7 @@ export default function CarDetails() {
               <button
                 onClick={handlePost}
                 disabled={addRemark.isPending || !remark.trim()}
-                className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-10 py-5 rounded-xl font-bold text-lg transition"
+                className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-10 py-5 rounded-xl font-bold text-lg transition"
               >
                 {addRemark.isPending ? "Posting..." : "Post"}
               </button>
