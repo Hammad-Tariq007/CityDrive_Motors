@@ -17,10 +17,8 @@ import { UpdateCarDto } from './dto/update-car.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { OwnerGuard } from '../common/guards/owner.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
-import { v4 as uuidv4 } from 'uuid';
-import { File as MulterFile } from 'multer';
+import { Express } from 'multer';
+import { storage } from '../config/cloudinary.config';
 import {
   ApiTags,
   ApiBearerAuth,
@@ -64,20 +62,14 @@ export class CarsController {
   @Post()
   @UseInterceptors(
     FilesInterceptor('images', 10, {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: (req, file, callback) => {
-          const filename = `${uuidv4()}${extname(file.originalname)}`;
-          callback(null, filename);
-        },
-      }),
+      storage,
       fileFilter: (req, file, callback) => {
-        if (!file.originalname.match(/\.(jpg|jpeg|png|webp)$/i)) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png|webp|gif)$/i)) {
           return callback(new Error('Only image files allowed!'), false);
         }
         callback(null, true);
       },
-      limits: { fileSize: 5 * 1024 * 1024 },
+      limits: { fileSize: 10 * 1024 * 1024 },
     }),
   )
   @ApiOperation({ summary: 'Create a new car' })
@@ -87,9 +79,10 @@ export class CarsController {
   async create(
     @Body() dto: CreateCarDto,
     @Request() req: any,
-    @UploadedFiles() files: MulterFile[],
+    @UploadedFiles() files: Express.Multer.File[],
   ) {
-    const imageUrls = files?.map((file) => `/uploads/${file.filename}`) || [];
+    const imageUrls = files?.map((file) => file.path) || [];
+
     const fullDto = {
       ...dto,
       price: Number(dto.price),
@@ -97,6 +90,7 @@ export class CarsController {
       year: Number(dto.year),
       images: imageUrls,
     };
+
     return this.carsService.create(fullDto, req.user.sub);
   }
 
