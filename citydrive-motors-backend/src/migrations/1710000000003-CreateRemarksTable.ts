@@ -5,7 +5,7 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export class CreateRemarksTable1763970191164 implements MigrationInterface {
+export class CreateRemarksTable1710000000003 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
@@ -19,9 +19,13 @@ export class CreateRemarksTable1763970191164 implements MigrationInterface {
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'text',
-            type: 'varchar',
-            length: '500',
+            name: 'content',
+            type: 'text',
+          },
+          {
+            name: 'rating',
+            type: 'int',
+            isNullable: true,
           },
           {
             name: 'createdAt',
@@ -29,25 +33,15 @@ export class CreateRemarksTable1763970191164 implements MigrationInterface {
             default: 'CURRENT_TIMESTAMP',
           },
           {
-            name: 'carId',
-            type: 'uuid',
-          },
-          {
             name: 'userId',
             type: 'uuid',
             isNullable: true,
           },
+          {
+            name: 'carId',
+            type: 'uuid',
+          },
         ],
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      'remarks',
-      new TableForeignKey({
-        columnNames: ['carId'],
-        referencedTableName: 'cars',
-        referencedColumnNames: ['id'],
-        onDelete: 'CASCADE',
       }),
     );
 
@@ -60,9 +54,19 @@ export class CreateRemarksTable1763970191164 implements MigrationInterface {
         onDelete: 'SET NULL',
       }),
     );
+
+    await queryRunner.createForeignKey(
+      'remarks',
+      new TableForeignKey({
+        columnNames: ['carId'],
+        referencedTableName: 'cars',
+        referencedColumnNames: ['id'],
+        onDelete: 'CASCADE',
+      }),
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('remarks');
+    await queryRunner.dropTable('remarks', true);
   }
 }

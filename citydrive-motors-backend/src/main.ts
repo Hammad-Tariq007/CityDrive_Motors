@@ -14,7 +14,6 @@ async function bootstrap() {
 
   const logger = new Logger('Bootstrap');
 
-  // CORS – allow Vercel domain + localhost during dev
   const allowedOrigins = [
     'http://localhost:5173',
     'https://city-drive-motors.vercel.app/',
@@ -28,7 +27,7 @@ async function bootstrap() {
       ) {
         callback(null, true);
       } else {
-        callback(null, true); // Remove this line later when you want strict CORS
+        callback(null, true);
       }
     },
     credentials: true,
@@ -39,18 +38,15 @@ async function bootstrap() {
       transform: true,
       whitelist: true,
       forbidNonWhitelisted: true,
-      // Hide detailed errors in production
       disableErrorMessages: process.env.NODE_ENV === 'production',
     }),
   );
 
-  // Serve uploaded files
   app.use(
     '/uploads',
     require('express').static(path.join(__dirname, '..', 'uploads')),
   );
 
-  // Health check endpoint (Railway & monitoring tools love this)
   app.getHttpAdapter().get('/health', (req, res) => {
     res.status(200).json({
       status: 'ok',
@@ -59,7 +55,6 @@ async function bootstrap() {
     });
   });
 
-  // Swagger
   const config = new DocumentBuilder()
     .setTitle('CityDrive Motors API')
     .setDescription('API documentation')

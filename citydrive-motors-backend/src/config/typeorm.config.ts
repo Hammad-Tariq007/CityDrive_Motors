@@ -23,7 +23,7 @@ const config: TypeOrmModuleOptions = {
     : process.env.DB_NAME || 'citydrive_db',
 
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-  migrations: [__dirname + '/../database/migrations/*{.ts,.js}'],
+  migrations: [__dirname + '/../migrations/*{.ts,.js}'],
   synchronize: !isProduction,
   logging: !isProduction,
   ssl: isProduction ? { rejectUnauthorized: false } : undefined,
