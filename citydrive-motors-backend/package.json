@@ -21,7 +21,7 @@
     "migration:generate": "typeorm-ts-node-commonjs migration:generate ./src/migrations -d src/database/data-source.ts",
     "migration:run": "typeorm-ts-node-commonjs migration:run -d src/database/data-source.ts",
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/database/data-source.ts",
-    "migrate": "node -r reflect-metadata dist/database/data-source.js migration:run",
+    "migrate": "node -r reflect-metadata dist/database/data-source.js --runMigrations",
     "start:migrate": "npm run migrate && npm run start:prod"
   },
   "dependencies": {

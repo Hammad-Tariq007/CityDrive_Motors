@@ -12,12 +12,9 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
   entities: [User, Car, Remark],
-  // Important: point to compiled migrations in production
   migrations: ['dist/migrations/*.js'],
   synchronize: false,
   logging: false,
 });
 
-// THIS LINE IS THE ONLY ONE THAT WAS MISSING
-// It makes the TypeORM CLI work with "node dist/database/data-source.js migration:run"
 module.exports = AppDataSource;
